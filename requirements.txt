@@ -5,3 +5,5 @@ seaborn
 numpy
 matplotlib
 scipy
+gzip
+os
