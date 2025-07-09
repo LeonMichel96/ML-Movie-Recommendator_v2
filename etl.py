@@ -86,9 +86,10 @@ df_basics.replace('\\N', np.nan, inplace=True)
 
 # rename column
 df_basics.rename(columns={'tconst': 'title_id'}, inplace=True)
+df_basics.columns = df_basics.columns.str.lower()
 
 # remove nulls in names
-df_basics = df_basics[df_basics['primaryTitle'].notna()]
+df_basics = df_basics[df_basics['primarytitle'].notna()]
 
 # linking tables (many to many relationships)
 # create a DataFrame for the linking table (title_id, genre_name)
@@ -113,6 +114,10 @@ df_crew.drop(columns=['writers'], inplace= True)
 
 # change /N to NaN
 df_crew.replace('\\N', np.nan, inplace=True)
+df_crew.replace('nan', np.nan, inplace=True)
+
+# drop nulls
+df_crew.dropna(inplace=True)
 
 # rename columns
 df_crew.rename(columns={'directors': 'name_id',
@@ -127,7 +132,10 @@ df_crew.rename(columns={'name_id_list': 'name_id'}, inplace=True)
 # ensure director IDs are stripped of whitespace if any
 df_crew['name_id'] = df_crew['name_id'].str.strip()
 
+# just consider directors related to movies in df_basics
+df_crew = df_crew[df_crew['title_id'].isin(df_basics['title_id'])]
 df_crew.reset_index(drop=True, inplace=True)
+
 
 ## Names DF
 # rename column of directors for later merge
@@ -140,12 +148,27 @@ df_names.replace('\\N', np.nan, inplace=True)
 # drop null names
 df_names = df_names[df_names['primaryName'].notna()]
 
+# rename columns to lowercase
+df_names.columns = df_names.columns.str.lower()
+
+# just consider names of directors in df_crew
+df_names = df_names[df_names['name_id'].isin(df_crew['name_id'])]
+df_names.reset_index(drop=True, inplace=True)
+
+# extra cleaning for crew_df ensure only crews in names_df are stored (to respect relationships)
+df_crew = df_crew[df_crew['name_id'].isin(df_names['name_id'])]
+
 ## Ratings DF
 # change /N to NaN
 df_ratings.replace('\\N', np.nan, inplace=True)
 
 # rename column
 df_ratings.rename(columns={'tconst': 'title_id'}, inplace=True)
+df_ratings.columns = df_ratings.columns.str.lower()
+
+# just consider ratings related to movies in df_basics
+df_ratings = df_ratings[df_ratings['title_id'].isin(df_basics['title_id'])]
+df_ratings.reset_index(drop=True, inplace=True)
 
 print('Cleaning done')
 
@@ -174,8 +197,8 @@ DROP TABLE IF EXISTS names;
 
 CREATE TABLE names (
     name_id VARCHAR(50) NOT NULL,
-    primaryName VARCHAR(256) NOT NULL,
-    birthYear INT,
+    primaryname VARCHAR(256) NOT NULL,
+    birthyear INT,
     PRIMARY KEY (name_id)
 );
 
@@ -186,11 +209,11 @@ CREATE TABLE genres (
 
 CREATE TABLE titles (
     title_id VARCHAR(50) NOT NULL,
-    titleType VARCHAR(50) NOT NULL,
-    primaryTitle VARCHAR(300) NOT NULL,
-    isAdult INT,
-    startYear INT,
-    runtimeMinutes INT,
+    titletype VARCHAR(50) NOT NULL,
+    primarytitle VARCHAR(300) NOT NULL,
+    isadult INT,
+    startyear INT,
+    runtimeminutes INT,
     PRIMARY KEY (title_id)
 );
 
@@ -204,8 +227,8 @@ CREATE TABLE crew (
 
 CREATE TABLE ratings (
     title_id VARCHAR(50) NOT NULL,
-    averageRating FLOAT NOT NULL,
-    numVotes INT NOT NULL,
+    averagerating FLOAT NOT NULL,
+    numvotes INT NOT NULL,
     PRIMARY KEY (title_id),
     FOREIGN KEY (title_id) REFERENCES titles (title_id)
 );
@@ -239,10 +262,15 @@ engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{
 
 # Insertar data
 df_names.to_sql('names', engine, if_exists='append', index=False)
+print("Names table inserted")
 df_genres_table.to_sql('genres', engine, if_exists='append', index=False)
+print("Genres table inserted")
 df_basics.to_sql('titles', engine, if_exists='append', index=False)
+print("Titles table inserted")
 df_crew.to_sql('crew', engine, if_exists='append', index=False)
+print("Crew table inserted")
 df_movie_genres_exploded.to_sql('titles_genres', engine, if_exists='append', index=False)
+print("Titles_genres table inserted")
 df_ratings.to_sql('ratings', engine, if_exists='append', index=False)
-
+print("Ratings table inserted")
 print("Inserions completed successfully")
