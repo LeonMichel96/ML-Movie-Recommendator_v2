@@ -8,3 +8,4 @@ venv/
 data_sources/raw_files/
 data_sources/extracted_files/
 data/
+notebooks/
