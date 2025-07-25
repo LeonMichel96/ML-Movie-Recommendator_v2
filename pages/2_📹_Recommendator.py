@@ -42,11 +42,11 @@ st.info("""**Sistema de recomendación:**
 st.subheader('Selecciona 5 Peliculas')
 
 with st.form('Selección de películas'):
-    movie_1 = st.selectbox('Selecciona una película', options=base_df['title_year'], key='1')
-    movie_2 = st.selectbox('Selecciona una película', options=base_df['title_year'], key='2')
-    movie_3 = st.selectbox('Selecciona una película', options=base_df['title_year'], key='3')
-    movie_4 = st.selectbox('Selecciona una película', options=base_df['title_year'], key='4')
-    movie_5 = st.selectbox('Selecciona una película', options=base_df['title_year'], key='5')
+    movie_1 = st.selectbox('Selecciona una película', options=base_df['title_year'],index=1169, key='1')
+    movie_2 = st.selectbox('Selecciona una película', options=base_df['title_year'], index=43283, key='2')
+    movie_3 = st.selectbox('Selecciona una película', options=base_df['title_year'],index=267650, key='3')
+    movie_4 = st.selectbox('Selecciona una película', options=base_df['title_year'], index=270849,key='4')
+    movie_5 = st.selectbox('Selecciona una película', options=base_df['title_year'],index=283581, key='5')
 
     submitted = st.form_submit_button("Submit")
 if submitted:
@@ -55,6 +55,9 @@ if submitted:
     selected_indexes = base_df[base_df['title_year'].isin([movie_1, movie_2, movie_3, movie_4, movie_5])]
     selected_indexes = selected_indexes.index
     selection_df = pca_df.loc[selected_indexes]
+
+    st.subheader('Películas Seleccionadas')
+    st.dataframe(base_df.loc[selected_indexes])
 
 # Aplicar KNN para encontrar 10 películas cercanas por selección
     recommendator_indexes = KNN(pca_df,selection_df)
