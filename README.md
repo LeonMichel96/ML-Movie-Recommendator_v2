@@ -42,3 +42,6 @@ Incluye un **SQL Agent** impulsado por un modelo de lenguaje (LLM), que permite:
 - 🧠 Modelos LLM (DeepSeek)
 - 🗃️ SQL
 - 📁 Base de datos IMDB
+
+link a loom:
+https://www.loom.com/share/5d1590c5e42e42e0af96482116f71fc9?sid=a7fe899b-968e-4ba8-9cfc-7327c687ad9c
