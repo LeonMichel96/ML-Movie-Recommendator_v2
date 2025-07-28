@@ -2,24 +2,51 @@ import streamlit as st
 st.title('🚀 Intro')
 
 st.markdown("""
-# ¿No sabes qué ver?
-Esta app te recomienda películas basadas en tus gustos usando técnicas de machine learning y datos reales de IMDb.
+# 🎬 Sist de Recomendación de Películas + Agente SQL
 
-## ¿Cómo funciona esto?
-**Procesamos todo IMDb**.
+Este proyecto es una aplicación interactiva construida con **Streamlit** que combina un sistema de recomendación de películas con un agente inteligente capaz de responder preguntas en lenguaje natural sobre una base de datos de películas (IMDB).
 
-Tomamos el dataset completo de IMDb, combinamos variables numéricas y categóricas (como género, puntuación, votos, etc.) y lo reducimos a unas pocas dimensiones con PCA. Así, cada película se convierte en un punto en un espacio que resume sus características principales.
+---
 
-**Tú eliges tus favoritas**.
+## 🧠 Tecnologías y Enfoque
 
-Solo tienes que escoger 5 películas que te gusten. Estas se usarán como referencia para encontrar recomendaciones similares.
+### 1. Sistema de Recomendación
+Basado en técnicas de **aprendizaje no supervisado (Unsupervised Learning)**, el sistema permite al usuario seleccionar películas que le gustan y, en función de esas elecciones, genera recomendaciones personalizadas.
 
-**Buscamos películas parecidas**.
+#### 🔍 Reducción de Dimensiones con PCA
+Se utiliza **PCA (Análisis de Componentes Principales)** para:
+- Reducir la dimensionalidad de los datos numéricos.
+- Identificar patrones y relaciones ocultas entre las películas.
+- Mejorar la eficiencia y visualización de los datos.
 
-Para cada una de tus elecciones, encontramos las 10 más cercanas usando un algoritmo llamado KNN (básicamente, busca las más parecidas en el espacio PCA). En total, juntamos 55 películas candidatas.
+#### 🤝 Recomendación con KNN
+Se emplea el algoritmo **K-Nearest Neighbors** para:
+- Encontrar las películas más similares a las seleccionadas por el usuario.
+- Generar una lista final de recomendaciones relevantes.
 
-**Creamos 3 "mixes" de recomendaciones**.
+#### 🎯 Agrupamiento con KMeans
+Las películas recomendadas se agrupan en **3 clústeres distintos** con **KMeans**, permitiendo mostrar diferentes "mixes" de recomendaciones
 
-Con esas 55 películas, usamos KMeans para agruparlas en 3 clústeres. Cada grupo tiene su propio estilo, así que puedes explorar distintas combinaciones según tu mood.
+---
 
+### 2. Agente SQL Inteligente
+Incluye un **SQL Agent** impulsado por un modelo de lenguaje (LLM), que permite:
+- Escribir preguntas en lenguaje natural sobre las películas.
+- El modelo interpreta la pregunta, genera la consulta SQL correspondiente y devuelve los resultados en tiempo real.
+- Ejemplo:
+  _"¿Cuáles son las películas mejor valoradas del año 2000?"_ → genera y ejecuta una consulta SQL automáticamente.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- 🐍 Python
+- 📊 Pandas, Scikit-learn
+- 🌐 Streamlit
+- 🧠 Modelos LLM (DeepSeek)
+- 🗃️ SQL
+- 📁 Base de datos IMDB
+
+link a loom:
+https://www.loom.com/share/5d1590c5e42e42e0af96482116f71fc9?sid=a7fe899b-968e-4ba8-9cfc-7327c687ad9c
 """)
