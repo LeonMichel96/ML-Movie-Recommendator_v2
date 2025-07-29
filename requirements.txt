@@ -5,5 +5,10 @@ seaborn
 numpy
 matplotlib
 scipy
-os
 streamlit
+torch
+huggingface_hub
+python-dotenv
+psycopg2-binary
+sqlalchemy
+transformers

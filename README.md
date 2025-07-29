@@ -2,6 +2,14 @@
 
 Este proyecto es una aplicación interactiva construida con **Streamlit** que combina un sistema de recomendación de películas con un agente inteligente capaz de responder preguntas en lenguaje natural sobre una base de datos de películas (IMDB).
 
+Link a bases de datos de IMDB: https://datasets.imdbws.com/
+
+Solo descargar:
+- title.ratings
+- title.basics
+- title.crews
+- name.basics
+
 ---
 
 ## 🧠 Tecnologías y Enfoque
